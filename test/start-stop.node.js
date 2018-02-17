@@ -10,10 +10,8 @@ chai.use(dirtyChai)
 const async = require('async')
 const fs = require('fs')
 const path = require('path')
-const os = require('os')
 const isrunning = require('is-running')
 
-const isWindows = os.platform() === 'win32'
 const findIpfsExecutable = require('../src/utils/find-ipfs-executable')
 const tempDir = require('../src/utils/tmp-dir')
 const IPFSFactory = require('../src')
@@ -32,8 +30,6 @@ types.forEach((type) => {
     const dfConfig = Object.assign({}, dfBaseConfig, { type: type })
 
     describe('start and stop', () => {
-      if (isWindows) { return }
-
       let ipfsd
       let repoPath
       let api
@@ -41,7 +37,7 @@ types.forEach((type) => {
       let stopped = false
 
       before(function (done) {
-        this.timeout(20 * 1000)
+        this.timeout(80 * 1000)
 
         const f = IPFSFactory.create(dfConfig)
 
@@ -66,7 +62,7 @@ types.forEach((type) => {
       it('daemon exec path should match type', () => {
         let execPath = exec[type]
 
-        expect(ipfsd.exec).to.include.string(execPath)
+        expect(ipfsd.exec).to.include.string(path.join(execPath))
       })
 
       it('daemon should not be running', (done) => {
@@ -77,7 +73,7 @@ types.forEach((type) => {
       })
 
       it('.start', function (done) {
-        this.timeout(20 * 1000)
+        this.timeout(80 * 1000)
 
         ipfsd.start((err, ipfs) => {
           expect(err).to.not.exist()
@@ -97,7 +93,7 @@ types.forEach((type) => {
       })
 
       it('.stop', function (done) {
-        this.timeout(20 * 1000)
+        this.timeout(80 * 1000)
 
         ipfsd.stop((err) => {
           expect(err).to.not.exist()
@@ -117,7 +113,7 @@ types.forEach((type) => {
 
       it('is stopped', function (done) {
         // shutdown grace period is already 10500
-        this.timeout(30 * 1000)
+        this.timeout(80 * 1000)
 
         ipfsd.pid((pid) => {
           expect(pid).to.not.exist()
@@ -133,6 +129,7 @@ types.forEach((type) => {
       })
 
       it('fail on start with non supported flags', function (done) {
+        this.timeout(80 * 1000)
         // TODO js-ipfs doesn't fail on unrecognized args.
         // Decided what should be the desired behaviour
         if (type === 'js') { return this.skip() }
@@ -157,7 +154,7 @@ types.forEach((type) => {
       let exec
 
       before(function (done) {
-        this.timeout(30 * 1000)
+        this.timeout(80 * 1000)
 
         const df = IPFSFactory.create(dfConfig)
         exec = findIpfsExecutable(type)
@@ -182,7 +179,7 @@ types.forEach((type) => {
       })
 
       describe('should fail on invalid exec path', function () {
-        this.timeout(20 * 1000)
+        this.timeout(80 * 1000)
 
         before((done) => {
           const df = IPFSFactory.create(dfConfig)
@@ -211,7 +208,7 @@ types.forEach((type) => {
       let ipfsd
 
       before(function (done) {
-        this.timeout(40 * 1000)
+        this.timeout(80 * 1000)
 
         const f = IPFSFactory.create(dfConfig)
 
@@ -252,7 +249,7 @@ types.forEach((type) => {
       })
 
       it('.stop', function (done) {
-        this.timeout(20 * 1000)
+        this.timeout(80 * 1000)
 
         ipfsd.stop((err) => {
           expect(err).to.not.exist()
@@ -276,7 +273,7 @@ types.forEach((type) => {
       })
 
       it('.stop and cleanup', function (done) {
-        this.timeout(20 * 1000)
+        this.timeout(80 * 1000)
 
         ipfsd.stop((err) => {
           expect(err).to.not.exist()
