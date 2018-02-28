@@ -115,7 +115,7 @@ describe('Spawn options', () => {
         })
       })
 
-      describe('spawn from a initialized repo', () => {
+      describe('spawn from an initialized repo', () => {
         // TODO: figure out why `proc` IPFS refuses
         // to start with a provided repo
         // `Error: Not able to start from state: uninitalized`
