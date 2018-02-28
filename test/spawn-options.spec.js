@@ -137,6 +137,7 @@ describe('Spawn options', () => {
           }
 
           f.spawn(options, (err, _ipfsd) => {
+            ipfsd = _ipfsd
             expect(err).to.not.exist()
             expect(_ipfsd).to.exist()
             expect(_ipfsd.api).to.not.exist()
@@ -146,7 +147,6 @@ describe('Spawn options', () => {
               expect(_ipfsd.initialized).to.eql(true)
             }
 
-            ipfsd = _ipfsd
             done()
           })
         })
