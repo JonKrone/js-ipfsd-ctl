@@ -142,7 +142,7 @@ describe('Spawn options', () => {
             expect(_ipfsd).to.exist()
             expect(_ipfsd.api).to.not.exist()
 
-            // proc nodes do not reuse initialized repos
+            // proc nodes don't reuse initialized repos
             if (fOpts.type !== 'proc') {
               expect(_ipfsd.initialized).to.eql(true)
             }
