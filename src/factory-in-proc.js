@@ -66,9 +66,13 @@ class FactoryInProc {
       options = {}
     }
     const IPFS = this.exec
-    new IPFS(options).version((err, _version) => {
-      if (err) { callback(err) }
-      callback(null, _version)
+    const node = new IPFS(options)
+
+    node.once('ready', () => {
+      node.version((err, _version) => {
+        if (err) { callback(err) }
+        callback(null, _version)
+      })
     })
   }
 
