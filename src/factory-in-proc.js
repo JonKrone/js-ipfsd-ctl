@@ -131,6 +131,7 @@ class FactoryInProc {
     const node = new Node(options)
 
     series([
+      (cb) => node.exec.on('ready', cb),
       (cb) => options.init
         ? node.init(cb)
         : cb(),
