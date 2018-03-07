@@ -131,7 +131,19 @@ class FactoryInProc {
     const node = new Node(options)
 
     series([
-      (cb) => node.exec.on('ready', cb),
+      (cb) => node.exec.once('ready', cb),
+      (cb) => {
+        try {
+          node.repo._isInitialized(() => {
+            node.initialized = true
+            cb()
+          })
+        } catch (err) {
+          // errors if not initialized
+          node.initialized = false
+          cb()
+        }
+      },
       (cb) => options.init
         ? node.init(cb)
         : cb(),
